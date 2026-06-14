@@ -71,6 +71,7 @@ class DataTransformation:
         
     def initiate_data_transformation(self,train_path,test_path):
         try:
+            # Reading train and test.csv coming from data ingestion component 
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
 
@@ -78,7 +79,6 @@ class DataTransformation:
             logging.info("Obtaining preprocessing object")
 
             preprocessing_obj = self.get_transformer_object()
-
             target_column_name = "math_score"
           
             # Separating X and y 
@@ -100,7 +100,7 @@ class DataTransformation:
                 input_feature_train_arr,
                 np.array(target_feature_train_df)
             ]
-            test_arr = np.c_[
+            test_arr = np.c_[   
                 input_feature_test_arr,
                 np.array(target_feature_test_df)
             ]
@@ -116,8 +116,7 @@ class DataTransformation:
             return (
                 train_arr,
                 test_arr,
-                self.data_transformation_config.preprecessor_obj_file_path,
             )
         
         except Exception as e:
-            raise CustomException(e,sys)
+            raise CustomException(e,sys) 
