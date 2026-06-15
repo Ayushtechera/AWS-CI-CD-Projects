@@ -1,111 +1,327 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Performance Indicator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f4f6f3;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            color: #1a1a1a;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            max-width: 660px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .card-header {
+            background: #1D9E75;
+            padding: 2rem 2rem 1.75rem;
+            position: relative;
+        }
+
+        .card-header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .card-header p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .header-icon {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-icon i { font-size: 28px; color: #fff; }
+
+        .card-body { padding: 2rem; }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section-label:first-of-type { margin-top: 0; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .grid-1 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #4b5563;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .field label i { font-size: 15px; color: #1D9E75; }
+
+        select,
+        input[type="number"] {
+            width: 100%;
+            height: 42px;
+            padding: 0 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: #f9fafb;
+            color: #1a1a1a;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        select:focus,
+        input[type="number"]:focus {
+            border-color: #1D9E75;
+            box-shadow: 0 0 0 3px rgba(29,158,117,0.12);
+            background: #ffffff;
+        }
+
+        select:hover,
+        input[type="number"]:hover {
+            border-color: #9ca3af;
+        }
+
+        .score-wrapper { position: relative; }
+
+        .score-wrapper input[type="number"] { padding-right: 52px; }
+
+        .score-badge {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: #9ca3af;
+            background: #f0f0f0;
+            border-radius: 4px;
+            padding: 2px 6px;
+            pointer-events: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 48px;
+            margin-top: 1.75rem;
+            background: #1D9E75;
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.15s, transform 0.1s;
+            font-family: inherit;
+        }
+
+        .submit-btn:hover { background: #0F6E56; }
+        .submit-btn:active { transform: scale(0.99); }
+        .submit-btn i { font-size: 18px; }
+
+        .result-card {
+            margin-top: 1.25rem;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            background: #E1F5EE;
+            border: 1px solid #9FE1CB;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .result-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1D9E75;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .result-icon i { font-size: 20px; color: #fff; }
+        .result-label { font-size: 12px; color: #0F6E56; margin-bottom: 2px; }
+        .result-score { font-size: 24px; font-weight: 700; color: #085041; }
+
+        @media (max-width: 480px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .card-header { padding-right: 5rem; }
+        }
+    </style>
+</head>
 <body>
-    <div class="login">
-       <h1>Student Exam Performance Indicator</h1>
-   
-       <form action="{{ url_for('predict_datapoint')}}" method="post">
-        <h1>
-            <legend>Student Exam Performance Prediction</legend>
-        </h1>
-        <div class="mb-3">
-            <label class="form-label">Gender</label>
-            <select class="form-control" name="gender" placeholder="Enter you Gender" required>
-                <option class="placeholder" selected disabled value="">Select your Gender</option>
-                <option value="male">
-                    Male
-                </option>
-                <option value="female">
-                    Female
-                </option>
-            </select>
+
+<div class="card">
+    <div class="card-header">
+        <h1>Student performance predictor</h1>
+        <p>Enter student details to predict maths score</p>
+        <div class="header-icon">
+            <i class="ti ti-school"></i>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Race or Ethnicity</label>
-            <select class="form-control" name="ethnicity" placeholder="Enter you ethnicity" required>
-                <option class="placeholder" selected disabled value="">Select Ethnicity</option>
-                <option value="group A">
-                    Group A
-                </option>
-                <option value="group B">
-                    Group B
-                </option>
-                <option value="group C">
-                    Group C
-                </option>
-                <option value="group D">
-                    Group D
-                </option>
-                <option value="group E">
-                    Group E
-                </option>
-            </select>
+    </div>
+
+    <div class="card-body">
+        <form action="{{ url_for('predict_datapoint') }}" method="post">
+
+            <div class="section-label">Personal info</div>
+            <div class="grid-2">
+                <div class="field">
+                    <label><i class="ti ti-gender-bigender"></i> Gender</label>
+                    <select name="gender" required>
+                        <option selected disabled value="">Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label><i class="ti ti-users"></i> Race / Ethnicity</label>
+                    <select name="ethnicity" required>
+                        <option selected disabled value="">Select group</option>
+                        <option value="group A">Group A</option>
+                        <option value="group B">Group B</option>
+                        <option value="group C">Group C</option>
+                        <option value="group D">Group D</option>
+                        <option value="group E">Group E</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-label">Background</div>
+            <div class="grid-1">
+                <div class="field">
+                    <label><i class="ti ti-certificate"></i> Parental level of education</label>
+                    <select name="parental_level_of_education" required>
+                        <option selected disabled value="">Select education level</option>
+                        <option value="associate's degree">Associate's degree</option>
+                        <option value="bachelor's degree">Bachelor's degree</option>
+                        <option value="high school">High school</option>
+                        <option value="master's degree">Master's degree</option>
+                        <option value="some college">Some college</option>
+                        <option value="some high school">Some high school</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 14px;">
+                <div class="field">
+                    <label><i class="ti ti-soup"></i> Lunch type</label>
+                    <select name="lunch" required>
+                        <option selected disabled value="">Select type</option>
+                        <option value="free/reduced">Free / reduced</option>
+                        <option value="standard">Standard</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label><i class="ti ti-book"></i> Test prep course</label>
+                    <select name="test_preparation_course" required>
+                        <option selected disabled value="">Select status</option>
+                        <option value="none">None</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-label">Scores</div>
+            <div class="grid-2">
+                <div class="field">
+                    <label><i class="ti ti-pencil"></i> Writing score</label>
+                    <div class="score-wrapper">
+                        <input type="number" name="reading_score" placeholder="0 – 100" min="0" max="100" />
+                        <span class="score-badge">/ 100</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label><i class="ti ti-book-2"></i> Reading score</label>
+                    <div class="score-wrapper">
+                        <input type="number" name="writing_score" placeholder="0 – 100" min="0" max="100" />
+                        <span class="score-badge">/ 100</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="submit-btn" type="submit">
+                <i class="ti ti-calculator"></i>
+                Predict maths score
+            </button>
+
+        </form>
+
+        {% if results %}
+        <div class="result-card">
+            <div class="result-icon"><i class="ti ti-sparkles"></i></div>
+            <div>
+                <div class="result-label">Predicted maths score</div>
+                <div class="result-score">{{ results }}</div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Parental Level of Education</label>
-            <select class="form-control" name="parental_level_of_education"
-                placeholder="Enter you Parent Education" required>
-                <option class="placeholder" selected disabled value="">Select Parent Education</option>
-                <option value="associate's degree">
-                    associate's degree
-                </option>
-                <option value="bachelor's degree">
-                    bachelor's degree
-                </option>
-                <option value="high school">
-                    high school
-                </option>
-                <option value="master's degree">
-                    master's degree
-                </option>
-                <option value="some college">
-                    some college
-                </option>
-                <option value="some high school">
-                    some high school
-                </option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Lunch Type</label>
-            <select class="form-control" name="lunch" placeholder="Enter you Lunch" required>
-                <option class="placeholder" selected disabled value="">Select Lunch Type</option>
-                <option value="free/reduced">
-                    free/reduced
-                </option>
-                <option value="standard">
-                    standard
-                </option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Test preparation Course</label>
-            <select class="form-control" name="test_preparation_course" placeholder="Enter you Course"
-                required>
-                <option class="placeholder" selected disabled value="">Select Test_course</option>
-                <option value="none">
-                    None
-                </option>
-                <option value="completed">
-                    Completed
-                </option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Writing Score out of 100</label>
-            <input class="form-control" type="number" name="reading_score"
-                placeholder="Enter your Reading score" min='0' max='100' />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Reading Score out of 100</label>
-            <input class="form-control" type="number" name="writing_score"
-                placeholder="Enter your Reading Score" min='0' max='100' />
-        </div>
-        <div class="mb-3">
-            <input class="btn btn-primary" type="submit" value="Predict your Maths Score" required />
-        </div>
-    </form>
-    <h2>
-       THE  prediction is {{results}}
-    </h2>
-   <body>
+        {% endif %}
+
+    </div>
+</div>
+
+</body>
 </html>
