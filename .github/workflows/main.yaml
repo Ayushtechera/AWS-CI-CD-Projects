@@ -82,7 +82,7 @@ jobs:
     # once images i pushed into ECR then this will CD will run 
     needs: build-and-push-ecr-image
     # Here we are not using github action machine, here we have our own server EC2 which will run the all the steps
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
 
       - name: Clean up disk space
