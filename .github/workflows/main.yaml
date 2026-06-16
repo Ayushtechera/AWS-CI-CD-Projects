@@ -84,6 +84,13 @@ jobs:
     # Here we are not using github action machine, here we have our own server EC2 which will run the all the steps
     runs-on: self-hosted
     steps:
+
+      - name: Clean up disk space
+        run: |
+          rm -rf ~/actions-runner/_diag/*.log
+          docker system prune -af
+          df -h
+
         # Download code on EC2 instance
       - name: Checkout
         uses: actions/checkout@v3
@@ -106,9 +113,9 @@ jobs:
         run: |
          docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
          
-      # - name: Stop and remove  container if running
-      #   run: |
-      #    docker ps -q --filter "name=mltest" | grep -q . && docker stop mltest && docker rm -fv mltest
+      - name: Stop and remove  container if running
+        run: |
+         docker ps -q --filter "name=mltest" | grep -q . && docker stop mltest && docker rm -fv mltest
        
         # Container will start from the image and application is served to users
       - name: Run Docker Image to serve users
