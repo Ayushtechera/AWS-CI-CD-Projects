@@ -1,4 +1,4 @@
-# 🎓 Student Performance Prediction
+#  Student Performance Prediction
 
 An end-to-end ML pipeline that predicts a student's **math score** based on their background and academic details — from raw data to a deployed web app.
 
@@ -6,7 +6,7 @@ An end-to-end ML pipeline that predicts a student's **math score** based on thei
 
 ---
 
-## 🚀 Tech Stack
+##  Tech Stack
 
 `Python` `Flask` `scikit-learn` `CatBoost` `XGBoost` `Pandas` `AWS Elastic Beanstalk`
 
