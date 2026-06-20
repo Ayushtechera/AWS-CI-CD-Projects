@@ -1,18 +1,18 @@
-#  Student Performance Prediction
+# 🎓 Student Performance Prediction — CI/CD Pipeline
 
-An end-to-end ML pipeline that predicts a student's **math score** based on their background and academic details — from raw data to a deployed web app.
+An end-to-end ML project with a **fully automated CI/CD pipeline** — push your code and the app automatically builds into a Docker container and deploys to AWS EC2.
 
 ![App Preview](./templates/preview.png)
 
 ---
 
-##  Tech Stack
+## 🚀 Tech Stack
 
-`Python` `Flask` `scikit-learn` `CatBoost` `XGBoost` `Pandas` `AWS Elastic Beanstalk`
+`Python` `Flask` `scikit-learn` `CatBoost` `XGBoost` `Docker` `GitHub Actions` `AWS EC2` `AWS ECR`
 
 ---
 
-## ⚙️ Pipeline Overview
+## ⚙️ ML Pipeline Overview
 
 | Step | What happens |
 |---|---|
@@ -20,6 +20,64 @@ An end-to-end ML pipeline that predicts a student's **math score** based on thei
 | Data Transformation | `StandardScaler` + `OneHotEncoder` via `ColumnTransformer` |
 | Model Training | Trains 8 models, picks best by R² score |
 | Prediction | User input → preprocessor → model → predicted score |
+
+---
+
+## 🔄 CI/CD Flow
+
+```
+Code Push (GitHub)
+      ↓
+GitHub Actions Triggered
+      ↓
+Docker Image Built
+      ↓
+Image Pushed to AWS ECR
+      ↓
+EC2 Pulls & Runs Container ✅
+```
+
+**3 things needed to set this up:**
+1. Docker build configured
+2. GitHub Actions workflow (`.github/workflows/`)
+3. IAM User in AWS with ECR & EC2 permissions
+
+---
+
+## ☁️ AWS EC2 — Docker Setup
+
+SSH into your EC2 instance and run these commands:
+
+```bash
+# Update packages
+sudo apt-get update -y
+sudo apt-get upgrade -y
+
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Add user to docker group
+sudo usermod -aG docker ubuntu
+newgrp docker
+```
+
+Then configure EC2 as a **self-hosted GitHub Actions runner** from:
+`GitHub Repo → Settings → Actions → Runners → New self-hosted runner`
+
+---
+
+## 🔐 GitHub Secrets Required
+
+Go to `Repo → Settings → Secrets → Actions` and add:
+
+| Secret | Value |
+|---|---|
+| `AWS_ACCESS_KEY_ID` | Your IAM user access key |
+| `AWS_SECRET_ACCESS_KEY` | Your IAM user secret key |
+| `AWS_REGION` | `us-east-1` |
+| `AWS_ECR_LOGIN_URI` | `<account-id>.dkr.ecr.ap-south-1.amazonaws.com` |
+| `ECR_REPOSITORY_NAME` | `simple-app` |
 
 ---
 
@@ -37,7 +95,9 @@ src/
 ├── exception.py
 ├── logger.py
 └── utils.py
-application.py        # Flask entry point
+Dockerfile
+app.py                         # Flask entry point
+.github/workflows/main.yaml    # CI/CD pipeline
 ```
 
 ---
@@ -45,21 +105,13 @@ application.py        # Flask entry point
 ## 🖥️ Run Locally
 
 ```bash
-git clone https://github.com/Ayushtechera/StudentPerformancePrediction-EndToEndMLPipeline.git
-cd StudentPerformancePrediction-EndToEndMLPipeline
+git clone https://github.com/Ayushtechera/StudentScore-CICD-AWS.git
+cd StudentScore-CICD-AWS
 pip install -r requirements.txt
-python application.py
+python app.py
 ```
 
-Then open `http://localhost:8080`
-
----
-
-## ☁️ Deployment
-
-Deployed on **AWS Elastic Beanstalk** using `.ebextensions` config.
-
-> EC2 instance has been shut down to avoid charges. Screenshot of the live app is attached above.
+Open `http://localhost:8080`
 
 ---
 
@@ -67,17 +119,18 @@ Deployed on **AWS Elastic Beanstalk** using `.ebextensions` config.
 
 [Students Performance in Exams](https://www.kaggle.com/datasets/spscientist/students-performance-in-exams) — Kaggle
 
-**Features:** gender, race/ethnicity, parental education, lunch, test prep course, reading score, writing score  
+**Features:** gender, race/ethnicity, parental education, lunch, test prep course, reading score, writing score
 **Target:** math score
 
 ---
 
 ## 💡 What I Built / Learned
 
-- Structured ML project beyond just a notebook
-- Custom logging & exception handling
-- Reusable sklearn `Pipeline` with serialized artifacts
-- Flask web app + AWS EB deployment
+- End-to-end CI/CD pipeline from scratch
+- Dockerized a Flask + ML app
+- Pushed Docker images to AWS ECR
+- Set up EC2 as a self-hosted GitHub Actions runner
+- Managed AWS IAM roles and GitHub Secrets
 
 ---
 
